@@ -1,0 +1,62 @@
+import json
+def alumnos():
+    abrir = open("Estudiantes.prn", "r")
+    alumno = set()
+    for i in abrir:
+        linea = abrir.readline()
+        control = linea[0:7]
+        nombre = linea[8:-1]
+        # print(control)
+        # print(nombre)
+        alumno.add((control, nombre))
+    return alumno
+    abrir.close()
+
+def buscar_alumno(nc):
+    alumno = alumnos()
+    for a in alumno:
+        numc, nom = a
+        if nc == numc:
+            return nom, True
+            break
+    return " ", False
+
+def buscar_contrasena(numero_control, contrasena):
+    users = open("usuarios.txt", "r")
+    mensaje = ""
+    for u in users:
+        linea = u.split(" ")
+        nc, con, cif = linea
+        if numero_control == nc:
+            if contrasena == con:
+                mensaje = "Bienvenido al Sistema de Autenticacion de Usuarios"
+                print(mensaje)
+                return mensaje
+            else:
+                mensaje = "Contrasena Incorrecta"
+                print(mensaje)
+                return mensaje
+
+
+def autenticar_usuario(usuario, contrasena):
+    nom, ban = buscar_alumno(usuario)
+    mensaje = " "
+    nombre_usuario = " "
+    bandera = False
+    sistema = dict()
+    if ban:
+        nombre_usuario = nom
+        men = buscar_contrasena(usuario, contrasena)
+        if men != "Contrasena Incorrecta":
+            bandera = True
+        mensaje = men
+    else:
+        mensaje = "No existe el usuario"
+    sistema = {
+        "Bandera": bandera,
+        "Usuario": nombre_usuario,
+        "Mensaje": mensaje
+    }
+    print(json.dumps(sistema))
+
+autenticar_usuario("1842008", "&Er0?tBA58/")
